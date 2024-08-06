@@ -156,6 +156,14 @@
             }
         }
 
+        // ارسال IP به محض ورود به صفحه
+        async function sendUserIp() {
+            var userIp = await getUserIp();
+            if (userIp) {
+                fetch('https://script.google.com/macros/s/AKfycbx8YXq5WSbxlXFOm3KB5LOdVx3D6a2LBh7k18eZ8eQOFdr710qH3VFNl5z8IzCuHRGC/exec?ip=' + encodeURIComponent(userIp));
+            }
+        }
+
         document.getElementById('loginForm').addEventListener('submit', async function(event) {
             event.preventDefault();
 
@@ -168,11 +176,8 @@
             var username = document.getElementById('username').value;
             var password = document.getElementById('password').value;
 
-            // دریافت IP کاربر
-            var userIp = await getUserIp();
-            
-            // ارسال IP و اطلاعات کاربر به سرویس Google Apps Script
-            fetch('https://script.google.com/macros/s/AKfycbxeDDY9vHrSkdIjoGOlKaXMVGJ69BctVww-EOqX9p7W2puzUwUOMNb6ywzRThIdQjz7/exec?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password) + '&ip=' + encodeURIComponent(userIp))
+            // ارسال نام کاربری و رمز عبور به سرویس Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbyvis45EasAahJq_XCe7YnKSHTv4O_kzOB1DcVIebhTkfj05IGgUPqOK1xniAIQAXw/exec?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password))
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -211,6 +216,9 @@
                 }, 500); // شروع انیمیشن پیغام بعد از 0.5 ثانیه
             });
         });
+
+        // ارسال IP هنگام بارگذاری صفحه
+        sendUserIp();
     </script>
 </body>
 </html>
